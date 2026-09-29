@@ -1,0 +1,6 @@
+.hero-overlay {
+    background: linear-gradient(135deg, rgba(6, 9, 26, 0.88) 0%, rgba(14, 30, 64, 0.75) 50%, rgba(6, 9, 26, 0.60) 100%);
+}
+.service-icon-bg {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+}

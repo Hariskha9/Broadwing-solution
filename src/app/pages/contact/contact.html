@@ -1,0 +1,263 @@
+<!-- Success Message State -->
+<div *ngIf="submitted" className="min-h-[60vh] flex items-center justify-center bg-slate-50 px-4">
+  <div class="max-w-md text-center">
+    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg class="w-10 h-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <h2 class="font-display text-3xl font-black text-slate-900 mb-3">Message Sent!</h2>
+    <p class="text-slate-600 mb-6">
+      Thank you for reaching out to Broadwing Solution. Our team will review your message and contact you shortly.
+    </p>
+    <button
+      (click)="resetForm()"
+      class="text-blue-700 font-semibold hover:text-blue-900 transition-colors cursor-pointer"
+    >
+      Send another message
+    </button>
+  </div>
+</div>
+
+<!-- Main Contact Form View -->
+<div *ngIf="!submitted">
+  <!-- Hero Section -->
+  <section class="bg-[#0f172a] py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-block bg-orange-500/20 text-orange-300 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-5">
+        Get In Touch
+      </div>
+      <h1 class="font-display text-5xl lg:text-6xl font-black text-white mb-5">
+        Let's Keep Your Truck Moving
+      </h1>
+      <p class="text-slate-300 text-xl max-w-2xl mx-auto">
+        Have a question about our dispatching services? Ready to learn more? Contact our team and we will get back to you promptly.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Form + Sidebar Info -->
+  <section class="py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        
+        <!-- Form Area -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+            <h2 class="font-display text-3xl font-black text-slate-900 mb-6">Send Us a Message</h2>
+
+            <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-5" novalidate>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <!-- First Name -->
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+                    First Name <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    formControlName="firstName"
+                    placeholder="John"
+                    class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    [ngClass]="isFieldInvalid('firstName') ? 'border-red-400 bg-red-50' : 'border-slate-300'"
+                  />
+                  <p *ngIf="isFieldInvalid('firstName')" class="text-red-500 text-xs mt-1">
+                    First name is required
+                  </p>
+                </div>
+
+                <!-- Last Name -->
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+                    Last Name <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    formControlName="lastName"
+                    placeholder="Smith"
+                    class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    [ngClass]="isFieldInvalid('lastName') ? 'border-red-400 bg-red-50' : 'border-slate-300'"
+                  />
+                  <p *ngIf="isFieldInvalid('lastName')" class="text-red-500 text-xs mt-1">
+                    Last name is required
+                  </p>
+                </div>
+              </div>
+
+              <!-- Company Name -->
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Company Name</label>
+                <input
+                  type="text"
+                  formControlName="company"
+                  placeholder="Smith Trucking LLC"
+                  class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <!-- Phone -->
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-1.5">Phone Number</label>
+                  <input
+                    type="tel"
+                    formControlName="phone"
+                    placeholder="(555) 000-0000"
+                    class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <!-- Email Address -->
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+                    Email Address <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    formControlName="email"
+                    placeholder="john@example.com"
+                    class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                    [ngClass]="isFieldInvalid('email') ? 'border-red-400 bg-red-50' : 'border-slate-300'"
+                  />
+                  <p *ngIf="isFieldInvalid('email')" class="text-red-500 text-xs mt-1">
+                    Valid email is required
+                  </p>
+                </div>
+              </div>
+
+              <!-- Equipment Type -->
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Equipment Type</label>
+                <select
+                  formControlName="equipmentType"
+                  class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                >
+                  <option value="">Select equipment type</option>
+                  <option *ngFor="let type of equipmentTypes" [value]="type">{{ type }}</option>
+                </select>
+              </div>
+
+              <!-- Subject -->
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Subject</label>
+                <input
+                  type="text"
+                  formControlName="subject"
+                  placeholder="What can we help you with?"
+                  class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <!-- Message -->
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+                  Message <span class="text-red-500">*</span>
+                </label>
+                <textarea
+                  rows="5"
+                  formControlName="message"
+                  placeholder="Tell us about your operation and how we can help..."
+                  class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none transition-colors"
+                  [ngClass]="isFieldInvalid('message') ? 'border-red-400 bg-red-50' : 'border-slate-300'"
+                ></textarea>
+                <p *ngIf="isFieldInvalid('message')" class="text-red-500 text-xs mt-1">
+                  Message is required
+                </p>
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                [disabled]="submitting"
+                class="w-full bg-orange-500 hover:bg-orange-400 disabled:bg-orange-300 text-white font-bold text-lg py-4 rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-orange-500/25 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <ng-container *ngIf="submitting; else idleState">
+                  <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                  </svg>
+                  Sending...
+                </ng-container>
+                <ng-template #idleState>
+                  Send Message
+                </ng-template>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Contact Info Sidebar -->
+        <div class="space-y-5">
+          <div class="bg-[#0f172a] rounded-3xl p-7 text-white">
+            <h3 class="font-heading font-bold text-xl mb-5">Contact Information</h3>
+
+            <div class="space-y-5">
+              <!-- Phone -->
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-semibold mb-0.5">Phone</div>
+                  <div class="text-slate-400 text-sm">Contact us to receive our current phone number</div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-blue-700 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-semibold mb-0.5">Email</div>
+                  <a href="mailto:info@broadwingsolution.com" class="text-blue-400 hover:text-blue-300 text-sm transition-colors">
+                    info@broadwingsolution.com
+                  </a>
+                </div>
+              </div>
+
+              <!-- Hours -->
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="font-semibold mb-0.5">Business Hours</div>
+                  <div class="text-slate-400 text-sm">Contact our team for current business hours and availability.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA Box -->
+          <div class="bg-blue-50 border border-blue-100 rounded-3xl p-7">
+            <h3 class="font-heading font-bold text-slate-900 text-lg mb-3">Ready to Apply?</h3>
+            <p class="text-slate-600 text-sm mb-4">Skip the contact form and go straight to the carrier application to get started with Broadwing Solution.</p>
+            <a routerLink="/apply" class="block text-center bg-orange-500 hover:bg-orange-400 text-white font-bold py-3 rounded-xl transition-colors">
+              Sign Up as a Driver
+            </a>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="bg-slate-100 rounded-3xl p-7">
+            <h3 class="font-heading font-bold text-slate-900 text-lg mb-3">Quick Links</h3>
+            <ul class="space-y-2">
+              <li *ngFor="let link of quickLinks">
+                <a [routerLink]="link.href" class="flex items-center gap-2 text-slate-600 hover:text-blue-700 text-sm font-medium transition-colors">
+                  <span class="text-orange-500">→</span>
+                  {{ link.label }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>

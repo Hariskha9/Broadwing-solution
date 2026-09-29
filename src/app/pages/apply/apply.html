@@ -1,0 +1,309 @@
+<div *ngIf="submitted" class="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-16">
+  <div class="max-w-lg w-full text-center">
+    <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+      <svg class="w-12 h-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <h1 class="font-display text-4xl font-black text-slate-900 mb-4">Application Submitted Successfully!</h1>
+    <p class="text-slate-600 text-lg mb-6 leading-relaxed">
+      Thank you for applying to Broadwing Solution. Our team will review your information and contact you regarding the next steps.
+    </p>
+    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-8">
+      <div class="text-blue-600 text-sm font-semibold mb-1">Your Application Reference Number</div>
+      <div class="font-display text-3xl font-black text-blue-800">{{ refNumber }}</div>
+      <div class="text-blue-500 text-xs mt-2">Please save this number for your records</div>
+    </div>
+    <div class="space-y-3">
+      <a routerLink="/" class="block w-full bg-orange-500 hover:bg-orange-400 text-white font-bold py-3 rounded-xl transition-colors">
+        Return to Homepage
+      </a>
+      <a routerLink="/services" class="block w-full border border-slate-300 text-slate-600 hover:text-slate-900 font-semibold py-3 rounded-xl transition-colors">
+        View Our Services
+      </a>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!submitted" class="min-h-screen bg-slate-50">
+  <!-- Header -->
+  <div class="bg-[#0f172a] py-10">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="font-display text-4xl font-black text-white mb-2">Sign Up as a Driver / Carrier</h1>
+      <p class="text-slate-400">Tell us about yourself, your truck, and your operating preferences.</p>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="bg-white border-b border-slate-200 sticky top-[72px] z-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm font-semibold text-slate-700">Step {{ step }} of {{ steps.length }}: {{ steps[step - 1].title }}</span>
+        <span class="text-sm text-slate-500">{{ progress | number:'1.0-0' }}% complete</span>
+      </div>
+      <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+        <div class="h-full bg-gradient-to-r from-blue-700 to-blue-500 rounded-full transition-all duration-300" [style.width.%]="progress"></div>
+      </div>
+      <!-- Step Dots -->
+      <div class="hidden sm:flex items-center justify-between mt-3">
+        <div *ngFor="let s of steps" class="flex flex-col items-center gap-1">
+          <div [ngClass]="{
+            'bg-blue-700': step > s.id,
+            'bg-orange-500 ring-2 ring-orange-300': step === s.id,
+            'bg-slate-200': step < s.id
+          }" class="w-3 h-3 rounded-full transition-colors"></div>
+          <span [ngClass]="step === s.id ? 'text-orange-600' : 'text-slate-400'" class="text-[10px] font-medium">{{ s.label }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Body -->
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <form [formGroup]="applyForm" class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+      
+      <!-- Global Error Box -->
+      <div *ngIf="errors.length > 0" class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
+        <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <div>
+          <div class="font-semibold text-red-700 text-sm">Please fix the missing required fields:</div>
+          <ul class="text-red-600 text-xs mt-1 list-disc list-inside">
+            <li *ngFor="let err of errors">{{ err }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- STEP 1 — PERSONAL -->
+      <div *ngIf="step === 1" class="space-y-5">
+        <h2 class="font-display text-2xl font-black text-slate-900 mb-6">Personal Information</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">First Name <span class="text-red-500">*</span></label>
+            <input formControlName="firstName" placeholder="John" class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('firstName') ? 'border-red-400 bg-red-50' : 'border-slate-300'" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Middle Name</label>
+            <input formControlName="middleName" placeholder="Optional" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Last Name <span class="text-red-500">*</span></label>
+            <input formControlName="lastName" placeholder="Smith" class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('lastName') ? 'border-red-400 bg-red-50' : 'border-slate-300'" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Preferred Name</label>
+            <input formControlName="preferredName" placeholder="What name do you go by?" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Date of Birth</label>
+            <input type="date" formControlName="dateOfBirth" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Phone Number <span class="text-red-500">*</span></label>
+            <input type="tel" formControlName="phone" placeholder="(555) 000-0000" class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('phone') ? 'border-red-400 bg-red-50' : 'border-slate-300'" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address <span class="text-red-500">*</span></label>
+            <input type="email" formControlName="email" placeholder="john@example.com" class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('email') ? 'border-red-400 bg-red-50' : 'border-slate-300'" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Secondary Phone</label>
+          <input type="tel" formControlName="secondaryPhone" placeholder="Optional secondary number" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+        </div>
+        <div class="border-t border-slate-100 pt-5">
+          <h3 class="font-bold text-slate-700 mb-4">Address</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1.5">Street Address <span class="text-red-500">*</span></label>
+              <input formControlName="address" placeholder="123 Main St" class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('address') ? 'border-red-400 bg-red-50' : 'border-slate-300'" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">City <span class="text-red-500">*</span></label>
+                <input formControlName="city" placeholder="Dallas" class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('city') ? 'border-red-400 bg-red-50' : 'border-slate-300'" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">State <span class="text-red-500">*</span></label>
+                <select formControlName="state" class="w-full border rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('state') ? 'border-red-400' : 'border-slate-300'">
+                  <option value="">Select state</option>
+                  <option *ngFor="let s of usStates" [value]="s">{{ stateNames[s] }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">ZIP Code <span class="text-red-500">*</span></label>
+                <input formControlName="zip" placeholder="75001" class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('zip') ? 'border-red-400 bg-red-50' : 'border-slate-300'" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1.5">Country</label>
+              <input formControlName="country" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 — BUSINESS -->
+      <div *ngIf="step === 2" class="space-y-5">
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-2">
+          <p class="text-blue-700 text-sm">Business information is collected for carrier onboarding and dispatch service purposes. All information is kept confidential.</p>
+        </div>
+        <h2 class="font-display text-2xl font-black text-slate-900">Business / Carrier Information</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Business / Company Name <span class="text-red-500">*</span></label>
+            <input formControlName="businessName" placeholder="Smith Trucking LLC" class="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('businessName') ? 'border-red-400 bg-red-50' : 'border-slate-300'" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">DBA (Doing Business As)</label>
+            <input formControlName="dba" placeholder="If applicable" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Business Type <span class="text-red-500">*</span></label>
+          <select formControlName="businessType" class="w-full border rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" [ngClass]="isFieldInvalid('businessType') ? 'border-red-400' : 'border-slate-300'">
+            <option value="">Select type</option>
+            <option *ngFor="let t of ['Sole Proprietorship','LLC','Corporation','Partnership','Other']" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">MC Number</label>
+            <input formControlName="mcNumber" placeholder="MC-000000" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">USDOT Number</label>
+            <input formControlName="dotNumber" placeholder="US DOT Number" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 — EQUIPMENT -->
+      <div *ngIf="step === 3" class="space-y-5">
+        <h2 class="font-display text-2xl font-black text-slate-900">Truck & Equipment Information</h2>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Equipment Type <span class="text-red-500">*</span></label>
+          <div class="flex flex-wrap gap-2">
+            <button *ngFor="let t of equipmentTypes" type="button" (click)="applyForm.get('equipmentType')?.setValue(t)" [ngClass]="applyForm.get('equipmentType')?.value === t ? 'bg-blue-700 text-white border-blue-700' : 'bg-white text-slate-600 border-slate-300 hover:border-blue-400'" class="px-4 py-2 rounded-xl text-sm font-semibold border transition-colors">
+              {{ t }}
+            </button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Truck Year</label>
+            <input type="number" min="1980" max="2030" formControlName="truckYear" placeholder="2022" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Truck Make</label>
+            <input formControlName="truckMake" placeholder="Freightliner, Kenworth..." class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Truck Model</label>
+            <input formControlName="truckModel" placeholder="Cascadia, T680..." class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm" />
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5 — PREFERENCES -->
+      <div *ngIf="step === 5" class="space-y-5">
+        <h2 class="font-display text-2xl font-black text-slate-900">Operating Preferences</h2>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Preferred States / Regions</label>
+          <div class="flex flex-wrap gap-2">
+            <button *ngFor="let state of usStates" type="button" (click)="toggleArrayOption('preferredStates', state)" [ngClass]="isOptionSelected('preferredStates', state) ? 'bg-blue-700 text-white border-blue-700' : 'bg-white text-slate-600 border-slate-300 hover:border-blue-400'" class="px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors">
+              {{ state }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 7 — DOCUMENTS -->
+      <div *ngIf="step === 7" class="space-y-5">
+        <h2 class="font-display text-2xl font-black text-slate-900">Document Uploads</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div *ngFor="let doc of documentKeys">
+            <div class="text-sm font-semibold text-slate-700 mb-1.5">{{ doc.label }}</div>
+            <div (click)="fileInput.click()" [ngClass]="uploadedDocuments[doc.key] ? 'border-green-400 bg-green-50' : 'border-slate-300 bg-white hover:border-blue-400'" class="border border-dashed rounded-xl p-4 flex items-center gap-3 cursor-pointer transition-colors">
+              <input #fileInput type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" (change)="onFileUpload($event, doc.key)" />
+              
+              <ng-container *ngIf="uploadedDocuments[doc.key]; else uploadPlaceholder">
+                <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium text-green-700 truncate">{{ uploadedDocuments[doc.key]?.name }}</div>
+                  <div class="text-xs text-green-600">{{ ((uploadedDocuments[doc.key]?.size || 0) / 1024) | number:'1.0-0' }} KB — Uploaded</div>
+                </div>
+                <button type="button" (click)="removeUpload(doc.key, $event)" class="text-slate-400 hover:text-red-500 transition-colors">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </ng-container>
+
+              <ng-template #uploadPlaceholder>
+                <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                </div>
+                <div>
+                  <div class="text-sm text-slate-600">Click to upload</div>
+                  <div class="text-xs text-slate-400">PDF, JPG, PNG, DOC — Max 10MB</div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 8 — COMMUNICATION -->
+      <div *ngIf="step === 8" class="space-y-5">
+        <h2 class="font-display text-2xl font-black text-slate-900">Communication Preferences</h2>
+        <div class="space-y-4 bg-slate-50 rounded-xl p-5">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" formControlName="agreeToContact" class="w-5 h-5 rounded border-slate-300 text-blue-700 focus:ring-blue-500 mt-0.5" />
+            <span class="text-sm text-slate-700">I agree to be contacted by Broadwing Solution regarding my application. *</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- STEP 9 — AGREEMENT -->
+      <div *ngIf="step === 9" class="space-y-5">
+        <h2 class="font-display text-2xl font-black text-slate-900">Agreement & Submission</h2>
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 space-y-4">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" formControlName="confirmAccuracy" class="w-5 h-5 rounded border-slate-300 text-blue-700 focus:ring-blue-500 mt-0.5" />
+            <span class="text-sm text-slate-700">I confirm that all information provided in this application is accurate and complete to the best of my knowledge. *</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
+        <button type="button" (click)="prev()" [disabled]="step === 1" class="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-semibold disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" /></svg>
+          Previous
+        </button>
+
+        <button *ngIf="step < steps.length" type="button" (click)="next()" class="flex items-center gap-2 bg-blue-800 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition-all hover:-translate-y-0.5">
+          Continue
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+        </button>
+
+        <button *ngIf="step === steps.length" type="button" (click)="submit()" [disabled]="submitting" class="flex items-center gap-2 bg-orange-500 hover:bg-orange-400 disabled:bg-orange-300 text-white font-bold px-8 py-3 rounded-xl transition-all hover:-translate-y-0.5">
+          <ng-container *ngIf="submitting; else submitText">
+            <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+            Submitting...
+          </ng-container>
+          <ng-template #submitText>
+            Submit Driver Application
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+          </ng-template>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
